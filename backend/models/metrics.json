@@ -1,0 +1,179 @@
+{
+  "dataset_summary": {
+    "total_samples": 1025,
+    "train_samples": 820,
+    "test_samples": 205,
+    "num_features": 13,
+    "target_distribution": {
+      "lower_risk_count": 499,
+      "higher_risk_count": 526,
+      "lower_risk_pct": 48.68,
+      "higher_risk_pct": 51.32
+    }
+  },
+  "selected_model": "Gradient Boosting",
+  "selection_rationale": "Gradient Boosting was selected based on balanced cross-validated performance, superior ROC-AUC (0.9996), and high clinical recall to minimize false negatives in patient risk stratification.",
+  "models": [
+    {
+      "model_name": "Random Forest",
+      "accuracy": 0.9512,
+      "precision": 0.9358,
+      "recall": 0.9714,
+      "f1_score": 0.9533,
+      "roc_auc": 0.9828,
+      "cv_roc_auc_mean": 0.9882,
+      "confusion_matrix": [
+        [
+          93,
+          7
+        ],
+        [
+          3,
+          102
+        ]
+      ],
+      "is_selected": false
+    },
+    {
+      "model_name": "Gradient Boosting",
+      "accuracy": 0.9902,
+      "precision": 1.0,
+      "recall": 0.981,
+      "f1_score": 0.9904,
+      "roc_auc": 0.9996,
+      "cv_roc_auc_mean": 0.9969,
+      "confusion_matrix": [
+        [
+          100,
+          0
+        ],
+        [
+          2,
+          103
+        ]
+      ],
+      "is_selected": true
+    },
+    {
+      "model_name": "Logistic Regression",
+      "accuracy": 0.8146,
+      "precision": 0.7638,
+      "recall": 0.9238,
+      "f1_score": 0.8362,
+      "roc_auc": 0.9297,
+      "cv_roc_auc_mean": 0.9114,
+      "confusion_matrix": [
+        [
+          70,
+          30
+        ],
+        [
+          8,
+          97
+        ]
+      ],
+      "is_selected": false
+    },
+    {
+      "model_name": "Support Vector Machine",
+      "accuracy": 0.8878,
+      "precision": 0.8661,
+      "recall": 0.9238,
+      "f1_score": 0.894,
+      "roc_auc": 0.963,
+      "cv_roc_auc_mean": 0.9506,
+      "confusion_matrix": [
+        [
+          85,
+          15
+        ],
+        [
+          8,
+          97
+        ]
+      ],
+      "is_selected": false
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "cp",
+      "name": "Chest Pain Type",
+      "importance": 0.2961,
+      "category": "Cardiovascular"
+    },
+    {
+      "feature": "ca",
+      "name": "Major Vessels Flourosopy (ca)",
+      "importance": 0.1242,
+      "category": "Anatomical"
+    },
+    {
+      "feature": "age",
+      "name": "Patient Age",
+      "importance": 0.1034,
+      "category": "Demographics"
+    },
+    {
+      "feature": "oldpeak",
+      "name": "ST Depression (Oldpeak)",
+      "importance": 0.0929,
+      "category": "Electrocardiogram & Stress"
+    },
+    {
+      "feature": "thal",
+      "name": "Thalassemia Result (thal)",
+      "importance": 0.0888,
+      "category": "Anatomical"
+    },
+    {
+      "feature": "chol",
+      "name": "Serum Cholesterol",
+      "importance": 0.0788,
+      "category": "Cardiovascular"
+    },
+    {
+      "feature": "thalach",
+      "name": "Max Heart Rate Achieved",
+      "importance": 0.0627,
+      "category": "Electrocardiogram & Stress"
+    },
+    {
+      "feature": "trestbps",
+      "name": "Resting Blood Pressure",
+      "importance": 0.0457,
+      "category": "Cardiovascular"
+    },
+    {
+      "feature": "sex",
+      "name": "Gender / Biological Sex",
+      "importance": 0.0424,
+      "category": "Demographics"
+    },
+    {
+      "feature": "exang",
+      "name": "Exercise-Induced Angina",
+      "importance": 0.0358,
+      "category": "Electrocardiogram & Stress"
+    },
+    {
+      "feature": "slope",
+      "name": "Peak Exercise ST Slope",
+      "importance": 0.0159,
+      "category": "Electrocardiogram & Stress"
+    },
+    {
+      "feature": "restecg",
+      "name": "Resting ECG Result",
+      "importance": 0.0128,
+      "category": "Electrocardiogram & Stress"
+    },
+    {
+      "feature": "fbs",
+      "name": "Fasting Blood Sugar > 120 mg/dl",
+      "importance": 0.0005,
+      "category": "Cardiovascular"
+    }
+  ],
+  "disclaimer": "Model performance is based on the supplied dataset and may not generalize to other populations or clinical settings. This tool is designed strictly for Clinical Decision Support and should never replace licensed clinical judgment."
+}

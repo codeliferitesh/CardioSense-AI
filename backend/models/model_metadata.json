@@ -1,0 +1,40 @@
+{
+  "model_name": "Gradient Boosting",
+  "num_features": 13,
+  "feature_names": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "numerical_features": [
+    "age",
+    "trestbps",
+    "chol",
+    "thalach",
+    "oldpeak"
+  ],
+  "categorical_features": [
+    "sex",
+    "cp",
+    "fbs",
+    "restecg",
+    "exang",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "test_accuracy": 0.9902,
+  "test_roc_auc": 0.9996,
+  "test_recall": 0.981,
+  "random_state": 42
+}

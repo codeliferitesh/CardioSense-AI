@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 204 100% 40%;
+    --color-surface: 215 28% 17%;
+    --color-background: 222 47% 11%;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased font-sans selection:bg-teal-500/30 selection:text-teal-200;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Clinical dashboard card style */
+.clinical-card {
+  @apply bg-slate-900/80 border border-slate-800/80 rounded-xl shadow-lg backdrop-blur-md transition-all duration-200;
+}
+
+.clinical-input {
+  @apply w-full bg-slate-950/70 border border-slate-700/70 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all;
+}
+
+.clinical-select {
+  @apply w-full bg-slate-950/70 border border-slate-700/70 rounded-lg px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all;
+}
+
+.clinical-label {
+  @apply block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5;
+}
