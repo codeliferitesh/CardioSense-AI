@@ -25,6 +25,18 @@ class ModelService:
         self.is_loaded = False
         self.load_artifacts()
 
+    def _run_training(self):
+        try:
+            try:
+                from training.train import run_training_pipeline
+            except ImportError:
+                from backend.training.train import run_training_pipeline
+            run_training_pipeline(output_dir=str(self.models_dir))
+            return True
+        except Exception as e:
+            print(f"[ModelService] Error executing training pipeline: {e}")
+            return False
+
     def load_artifacts(self):
         model_path = self.models_dir / "heart_disease_model.joblib"
         preprocessor_path = self.models_dir / "preprocessor.joblib"
@@ -34,27 +46,44 @@ class ModelService:
         # If artifacts don't exist yet, trigger training pipeline
         if not model_path.exists() or not preprocessor_path.exists():
             print(f"[ModelService] Artifacts not found at {self.models_dir}. Running training pipeline...")
-            try:
-                from backend.training.train import run_training_pipeline
-                run_training_pipeline(output_dir=str(self.models_dir))
-            except Exception as e:
-                print(f"[ModelService] Error auto-running training pipeline: {e}")
+            self._run_training()
 
+        # Attempt to load serialized artifacts
+        loaded = False
         if model_path.exists() and preprocessor_path.exists():
-            self.model = joblib.load(model_path)
-            self.preprocessor = joblib.load(preprocessor_path)
+            try:
+                self.model = joblib.load(model_path)
+                self.preprocessor = joblib.load(preprocessor_path)
+                loaded = True
+            except Exception as e:
+                print(f"[ModelService] Warning: Could not unpickle existing artifacts ({e}). Retraining natively for this environment...")
+                if self._run_training():
+                    try:
+                        self.model = joblib.load(model_path)
+                        self.preprocessor = joblib.load(preprocessor_path)
+                        loaded = True
+                    except Exception as retry_err:
+                        print(f"[ModelService] Error loading retrained model: {retry_err}")
+
+        if loaded:
             self.is_loaded = True
             print(f"[ModelService] Successfully loaded model and preprocessor from {self.models_dir}")
 
             if metadata_path.exists():
-                with open(metadata_path, "r") as f:
-                    self.metadata = json.load(f)
+                try:
+                    with open(metadata_path, "r") as f:
+                        self.metadata = json.load(f)
+                except Exception:
+                    pass
 
             if metrics_path.exists():
-                with open(metrics_path, "r") as f:
-                    self.metrics = json.load(f)
+                try:
+                    with open(metrics_path, "r") as f:
+                        self.metrics = json.load(f)
+                except Exception:
+                    pass
         else:
-            print(f"[ModelService] WARNING: Could not find model artifacts at {self.models_dir}")
+            print(f"[ModelService] WARNING: Could not find or load model artifacts at {self.models_dir}")
 
     def predict(self, patient: PatientPredictionInput) -> PredictionResultResponse:
         if not self.is_loaded or self.model is None or self.preprocessor is None:

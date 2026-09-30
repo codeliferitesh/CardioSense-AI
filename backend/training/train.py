@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from typing import Optional
 import joblib
 
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -23,21 +24,37 @@ from sklearn.metrics import (
 )
 
 def run_training_pipeline(
-    data_path: str = "data/heart_disease.csv",
-    output_dir: str = "backend/models"
+    data_path: Optional[str] = None,
+    output_dir: Optional[str] = None
 ):
     print("=" * 70)
     print("CARDIORISK CDSS - MACHINE LEARNING TRAINING & EVALUATION PIPELINE")
     print("=" * 70)
 
-    # Locate dataset
-    csv_file = Path(data_path)
-    if not csv_file.exists():
-        csv_file = Path("../" + data_path)
-    if not csv_file.exists():
-        csv_file = Path("data/heart_disease.csv")
-    if not csv_file.exists():
-        raise FileNotFoundError(f"Could not locate dataset at {data_path}")
+    # Locate dataset robustly across environments
+    base_dir = Path(__file__).resolve().parent.parent
+    candidate_paths = []
+    if data_path:
+        candidate_paths.append(Path(data_path))
+    candidate_paths.extend([
+        base_dir / "data" / "heart_disease.csv",
+        base_dir.parent / "data" / "heart_disease.csv",
+        Path("backend/data/heart_disease.csv"),
+        Path("data/heart_disease.csv"),
+        Path("../data/heart_disease.csv"),
+    ])
+
+    csv_file = None
+    for p in candidate_paths:
+        if p.exists():
+            csv_file = p
+            break
+
+    if csv_file is None:
+        raise FileNotFoundError(f"Could not locate heart_disease.csv in any of: {[str(p) for p in candidate_paths]}")
+
+    if output_dir is None:
+        output_dir = str(base_dir / "models")
 
     print(f"Loading dataset from: {csv_file.resolve()}")
     df = pd.read_csv(csv_file)
